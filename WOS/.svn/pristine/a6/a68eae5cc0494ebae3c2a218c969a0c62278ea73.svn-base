@@ -1,4 +1,0 @@
-oms.dao.findOrderCommodityListByOrderNos=oms.dao.getOrderCommodityListByOrderNos is error{0}
-oms.service.getOrderPageByParam=oms.service.getOrderPageByParam is error{0}
-oms.service.getOrderDetailByOrderNo=oms.service.getOrderDetailByOrderNo is error{0}
-oms.service.getOrderCountByParam=oms.service.getOrderCountByParam is error{0}

@@ -1,3 +1,0 @@
-repeat=customer already exists, type is {0} , number is {1}  
-repeat.mobile=customer already exists in mobile {0} 
-arguments.type.error=the type must be {0}

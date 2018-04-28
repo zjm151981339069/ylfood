@@ -1,9 +1,0 @@
-mybatis.driverClassName=com.spfood.fabric.SpfoodMySQLFabricDriver
-mybatis.url=jdbc:mysql:fabric://10.8.48.234:32274/wos?fabricServerGroup=spfood-test&fabricUsername=admin&fabricPassword=admin123#&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
-mybatis.username=spfood
-mybatis.password=SPfood123#
-zookeeper.addr=10.8.48.233:2181,10.8.48.233:2182,10.8.48.233:2183
-register=true
-redis.sentinel=10.8.48.234:26379,10.8.48.234:26380,10.8.48.234:26381
-redis.master=tomcat-test
-uias-server-url=http://10.8.48.230/uias-web/
