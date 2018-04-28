@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	 xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans.xsd  
+                        http://www.springframework.org/schema/aop  
+                        http://www.springframework.org/schema/aop/spring-aop.xsd  
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/tx  
+                        http://www.springframework.org/schema/tx/spring-tx.xsd  
+                        http://www.springframework.org/schema/mvc  
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                                http://code.alibabatech.com/schema/dubbo        
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	
+	<!-- 自动扫描 -->
+	<context:component-scan base-package="com.spfood.*" />
+
+
+
+	
+     <!-- <dubbo:reference id ="orderManagerService" interface="com.spfood.oms.order.intf.OrderManagerService"  check="false"  timeout="10000"  url="dubbo://localhost:21885"   ></dubbo:reference>
+     <dubbo:reference id ="orderCreateService" interface="com.spfood.oms.order.intf.OrderCreateService"  check="false"  timeout="10000"  url="dubbo://localhost:21885"  ></dubbo:reference>
+     <dubbo:reference id ="orderExchangeService" interface="com.spfood.oms.order.intf.OrderExchangeService"  check="false"  timeout="10000"  url="dubbo://localhost:21885"   ></dubbo:reference> -->
+     
+     
+     <dubbo:reference id ="orderManagerService" interface="com.spfood.oms.order.intf.OrderManagerService"  check="false"  timeout="10000"      ></dubbo:reference>
+     <dubbo:reference id ="orderCreateService" interface="com.spfood.oms.order.intf.OrderCreateService"  check="false"  timeout="10000"     ></dubbo:reference>
+     <dubbo:reference id ="orderExchangeService" interface="com.spfood.oms.order.intf.OrderExchangeService"  check="false"  timeout="10000"      ></dubbo:reference>
+     
+    <!-- dubbo service configuration -->
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="OMS-Order-Service-test"  />
+ 
+   
+   <!--本地测试不注册到服务中心  -->
+    <dubbo:registry protocol="zookeeper" address="10.8.48.230:2181,10.8.48.230:2182,10.8.48.230:2183"  register="false" />
+	
+	
+     <dubbo:reference id="orderInfoSynService" interface="com.spfood.oms.orderinfosyn.intf.OrderInfoSynService"  check="false"  timeout="20000" ></dubbo:reference> 
+    <dubbo:reference id="orderFinanceSynService" interface="com.spfood.oms.orderinfosyn.intf.OrderFinanceSynService"  check="false"  timeout="20000" ></dubbo:reference>
+    <dubbo:reference id="orderStatusSynService" interface="com.spfood.oms.orderinfosyn.intf.OrderStatusSynService"  check="false"  timeout="20000" ></dubbo:reference>
+    <dubbo:reference interface="com.spfood.wms.goods.intf.GoodsQuantityIntf" id="goodsQuantityService" check="false" timeout="20000"/>
+    <dubbo:reference interface="com.spfood.basicservice.intf.OrderNumberGeneratorService" id="orderNumberGeneratorService" check="false" timeout="20000"/>
+    <dubbo:reference id="orderPayByACPService" interface="com.spfood.oms.orderpay.intf.OrderPayByACPService"  check="false"  timeout="20000" ></dubbo:reference>
+    <dubbo:reference id="orderPayByAliPayService" interface="com.spfood.oms.orderpay.intf.OrderPayByAliPayService"  check="false"  timeout="20000" ></dubbo:reference>
+    <dubbo:reference id="orderPayByWeiChatService" interface="com.spfood.oms.orderpay.intf.OrderPayByWeiChatService"  check="false"  timeout="20000" ></dubbo:reference>
+    
+     
+</beans>

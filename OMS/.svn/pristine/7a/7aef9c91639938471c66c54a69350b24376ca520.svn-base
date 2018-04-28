@@ -1,0 +1,39 @@
+oms.order.dao.selectByOrderNos=Error occured while selecting a List {0} using sql {1} with parameter {2}
+oms.order.dao.updateByOrderNoSelective=Error occured while update {0} using sql {1} with parameter {2}
+oms.order.dao.updateBatch=Error occured while update {0} using sql {1} with parameter {2}
+oms.order.dao.selectOrderDetailByOrderNo=Error occured while selecting one {0} using sql {1} with parameter {2}
+oms.order.dao.selectByOrderNoList=Error occured while selecting a List {0} using sql {1} with parameter {2}
+
+oms.orderPay.dao.selectByOrderNos=Error occured while selecting a List {0} using sql {1} with parameter {2}
+oms.orderPay.dao.updateByOrderNoSelective=Error occured while update {0} using sql {1} with parameter {2}
+
+oms.orderTemp.dao.deleteByOrderNoInBatch=Error occured while delete {0} using sql {1} with parameter {2}
+oms.orderTemp.dao.updateByOrderNoSelective=Error occured while delete {0} using sql {1} with parameter {2}
+
+oms.service.getOrderByOrderNo=oms.service.getOrderByOrderNo is error with parameter {0}
+oms.service.deleteOrderTempByOrderNo=oms.service.deleteOrderTempByOrderNo is error with parameter {0}
+oms.service.getOrderTempByStatus=oms.service.getOrderTempByStatus is error with parameter {0}
+oms.service.updateOrderVerification=oms.service.updateOrderVerification is error with parameter {0}
+oms.service.updateOrderTempStatusByOrderNo=oms.service.updateOrderTempStatusByOrderNo is error with parameter {0}
+oms.service.getOrderPayByOrderNo=oms.service.getOrderPayByOrderNo is error with parameter {0}
+oms.service.getOrderPayByOrderNos=oms.service.getOrderPayByOrderNos is error with parameter {0}
+oms.service.updateOrderBill=oms.service.updateOrderBill is error with parameter {0}
+oms.service.updateOrderBill=oms.service.updateOrderBill is error with parameter {0}
+oms.service.getOrderTempOrderNosByStatus=oms.service.getOrderTempOrderNosByStatus is error with parameter {0}
+oms.service.getOrderTempCountByStatus=oms.service.getOrderTempCountByStatus is error with parameter {0}
+oms.service.updateOrderPayIsSendFms=oms.service.updateOrderPayIsSendFms is error with parameter {0}
+oms.service.updateOrderPayOK=oms.service.updateOrderPayOK is error with parameter {0}
+
+oms.service.addOrder=oms.service.addOrder is error with parameter {0}
+oms.service.addExchangeOrder=oms.service.addExchangeOrder is error with parameter {0}
+oms.service.addOrderLog=oms.service.addOrderLog is error with parameter {0}
+oms.service.addOrderPay=oms.service.addOrderPay is error with parameter {0}
+oms.service.addOrderLog=oms.service.addOrderLog is error with parameter {0}
+
+oms.dao.getOrderExchangeListByOrderNos=oms.dao.getOrderExchangeListByOrderNos is error{0}
+oms.service.getOrderExchangeByParas=oms.service.getOrderExchangeByParas is error{0}
+oms.service.selectOrderExchangeByExid=oms.service.selectOrderExchangeByExid is error{0}
+oms.service.cancelOrderExchangeByExid=oms.service.cancelOrderExchangeByExid is error{0}
+oms.service.OrderExchangeCreate=oms.service.OrderExchangeCreate is error{0}
+oms.service.getOrderExchangeListByCriteria=oms.service.getOrderExchangeListByCriteria is error with usernamecode does not exist
+oms.service.updateOrderStatusOk=oms.service.updateOrderStatusOk is erro{0}

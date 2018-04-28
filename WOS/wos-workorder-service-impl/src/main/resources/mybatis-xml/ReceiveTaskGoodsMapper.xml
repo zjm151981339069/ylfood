@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spfood.wos.workOrder.intf.domain.ReceiveTaskGoods" >
+  <resultMap id="BaseResultMap" type="com.spfood.wos.workOrder.intf.domain.ReceiveTaskGoods" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="RGID" property="rgId" jdbcType="BIGINT" />
+    <result column="RECCODE" property="recCode" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="TYPENAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="STANDARD" property="standard" jdbcType="VARCHAR" />
+    <result column="RECEIVETOTAL" property="receiveTotal" jdbcType="INTEGER" />
+    <result column="UNIT" property="unit" jdbcType="VARCHAR" />
+    <result column="AREANAME" property="areaName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE, RGID, RECCODE,TYPE, TYPENAME,NAME, STANDARD, RECEIVETOTAL, UNIT,AREANAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wos_receive_task_goods
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from wos_receive_task_goods
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.spfood.wos.workOrder.intf.domain.ReceiveTaskGoods" >
+    insert into wos_receive_task_goods (CODE, RECCODE, TYPE, TYPENAME,
+      NAME, STANDARD, 
+      RECEIVETOTAL, UNIT,AREANAME)
+    values (#{code,jdbcType=VARCHAR}, #{recCode,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{typeName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{standard,jdbcType=VARCHAR}, 
+      #{receiveTotal,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertInBatch" parameterType="java.util.List">
+      insert into wos_receive_task_goods (CODE, RECCODE, TYPE, TYPENAME,
+      NAME, STANDARD, 
+      RECEIVETOTAL, UNIT,AREANAME)
+    values
+    <foreach item="receiveTaskGoods" index="index" collection="list" separator=",">  
+	   (#{receiveTaskGoods.code,jdbcType=VARCHAR}, #{receiveTaskGoods.recCode,jdbcType=VARCHAR}, 
+      #{receiveTaskGoods.type,jdbcType=VARCHAR},#{receiveTaskGoods.typeName,jdbcType=VARCHAR},#{receiveTaskGoods.name,jdbcType=VARCHAR}, 
+      #{receiveTaskGoods.standard,jdbcType=INTEGER}, 
+      #{receiveTaskGoods.receiveTotal,jdbcType=INTEGER}, #{receiveTaskGoods.unit,jdbcType=VARCHAR}, #{receiveTaskGoods.areaName,jdbcType=VARCHAR})
+	</foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.spfood.wos.workOrder.intf.domain.ReceiveTaskGoods" >
+    insert into wos_receive_task_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="recCode != null" >
+        RECCODE,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="typeName != null" >
+        TYPENAME,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="standard != null" >
+        STANDARD,
+      </if>
+      <if test="receiveTotal != null" >
+        RECEIVETOTAL,
+      </if>
+      <if test="unit != null" >
+        UNIT,
+      </if>
+      <if test="areaName != null" >
+        AREANAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="recCode != null" >
+        #{recCode,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{TYPE,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        #{TYPENAME,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="standard != null" >
+        #{standard,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTotal != null" >
+        #{receiveTotal,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spfood.wos.workOrder.intf.domain.ReceiveTaskGoods" >
+    update wos_receive_task_goods
+    <set >
+      <if test="rgId != null" >
+        RGID = #{rgId,jdbcType=BIGINT},
+      </if>
+      <if test="recCode != null" >
+        RECCODE = #{recCode,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        TYPENAME = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="standard != null" >
+        STANDARD = #{standard,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTotal != null" >
+        RECEIVETOTAL = #{receiveTotal,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null" >
+        UNIT = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        AREANAME = #{areaName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spfood.wos.workOrder.intf.domain.ReceiveTaskGoods" >
+    update wos_receive_task_goods
+    set RGID = #{rgId,jdbcType=BIGINT},
+      RECCODE = #{recCode,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      TYPENAME = #{typeName,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      STANDARD = #{standard,jdbcType=VARCHAR},
+      RECEIVETOTAL = #{receiveTotal,jdbcType=INTEGER},
+      UNIT = #{unit,jdbcType=VARCHAR}
+      AREANAME = #{areaName,jdbcType=VARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByRecCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wos_receive_task_goods
+    where RECCODE = #{recCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

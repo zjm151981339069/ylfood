@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spfood.wos.workOrder.intf.domain.HouseOrderCommodity" >
+  <resultMap id="BaseResultMap" type="com.spfood.wos.workOrder.intf.domain.HouseOrderCommodity" >
+    <id column="COMID" property="comId" jdbcType="BIGINT" />
+    <result column="ORDERNO" property="orderNo" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="TYPENAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="PRICE" property="price" jdbcType="DECIMAL" />
+    <result column="ACTPRICE" property="actPrice" jdbcType="DECIMAL" />
+    <result column="COUNT" property="count" jdbcType="INTEGER" />
+    <result column="SUBTOTAL" property="subTotal" jdbcType="DECIMAL" />
+    <result column="ISPACKAGE" property="isPackage" jdbcType="INTEGER" />
+    <result column="PICTUREURL" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="OUTCODE" property="outCode" jdbcType="VARCHAR" />
+    <result column="RECCODE" property="recCode" jdbcType="VARCHAR" />
+    <result column="SORTCODE" property="sortCode" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="TYPENAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="AREACODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="AREANAME" property="areaName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    COMID, ORDERNO, CODE, NAME, TYPE, TYPENAME, PRICE, ACTPRICE, COUNT, SUBTOTAL, ISPACKAGE, PICTUREURL, 
+    OUTCODE, RECCODE, SORTCODE, AREACODE,AREANAME
+  </sql>
+  <sql id="Base_Where_Case" >
+    <where >
+      <if test="comId != null" >
+         AND comid = #{comId,jdbcType=BIGINT}
+      </if>
+      <if test="orderNo != null" >
+         AND orderno = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null" >
+         AND code = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+         AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="price != null" >
+         AND price = #{price,jdbcType=DECIMAL}
+      </if>
+      <if test="actPrice != null" >
+         AND actprice = #{actPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="count != null" >
+         AND count = #{count,jdbcType=INTEGER}
+      </if>
+      <if test="subTotal != null" >
+         AND subtotal = #{subTotal,jdbcType=DECIMAL}
+      </if>
+      <if test="isPackage != null" >
+         AND ispackage = #{isPackage,jdbcType=INTEGER}
+      </if>
+      <if test="pictureUrl != null" >
+         AND pictureurl = #{pictureUrl,jdbcType=VARCHAR}
+      </if>
+      
+    </where>
+  </sql>
+  <update id="updateTaskCodeInBatch" parameterType="java.util.List">
+    update wos_houseorder_commodity
+	    SET OUTCODE = CASE CODE 
+		    <foreach item="houseOrderCommodity" index="index" collection="list " >  
+		  	  WHEN #{houseOrderCommodity.code,jdbcType=VARCHAR} THEN #{houseOrderCommodity.outCode,jdbcType=VARCHAR}
+		  	</foreach>
+    	END,
+		  	RECCODE = CASE CODE 
+		    <foreach item="houseOrderCommodity" index="index" collection="list " >  
+		  	  WHEN #{houseOrderCommodity.code,jdbcType=VARCHAR} THEN #{houseOrderCommodity.recCode,jdbcType=VARCHAR}
+		  	</foreach>
+    	END,
+		  	SORTCODE = CASE CODE 
+		    <foreach item="houseOrderCommodity" index="index" collection="list " >  
+		  	  WHEN #{houseOrderCommodity.code,jdbcType=VARCHAR} THEN #{houseOrderCommodity.sortCode,jdbcType=VARCHAR}
+		  	</foreach>
+    	END
+    where CODE in 
+  	  <foreach item="houseOrderCommodity" index="index" collection="list " open="(" separator="," close=")">  
+	  	 #{houseOrderCommodity.code,jdbcType=VARCHAR}
+	  </foreach>
+  </update>
+ 
+  <!-- 批量插入商品表 -->
+	<insert id="insertInBatch" parameterType="java.util.List">
+		insert into wos_houseorder_commodity (ORDERNO,CODE,NAME,PRICE,ACTPRICE,COUNT,SUBTOTAL,ISPACKAGE,PICTUREURL,
+		AREACODE, AREANAME,OUTCODE,RECCODE,SORTCODE,TYPE,TYPENAME,areaCode,areaName) 
+		values
+		<foreach collection="list" item="item" index="index" separator="," > 
+        (#{item.orderNo,jdbcType=VARCHAR},#{item.code,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},
+        #{item.price,jdbcType=DECIMAL},#{item.actPrice,jdbcType=DECIMAL},#{item.count,jdbcType=INTEGER},
+        #{item.subTotal,jdbcType=DECIMAL},#{item.isPackage,jdbcType=INTEGER},#{item.pictureUrl,jdbcType=VARCHAR}, 
+        #{item.areaCode,jdbcType=VARCHAR}, #{item.areaName,jdbcType=VARCHAR},#{item.outCode,jdbcType=VARCHAR},
+        #{item.recCode,jdbcType=VARCHAR},#{item.sortCode,jdbcType=VARCHAR},
+        #{item.type,jdbcType=VARCHAR},#{item.typeName,jdbcType=VARCHAR},#{item.areaCode,jdbcType=VARCHAR},
+        #{item.areaName,jdbcType=VARCHAR}) 
+   		 </foreach> 
+	</insert>
+  
+</mapper>

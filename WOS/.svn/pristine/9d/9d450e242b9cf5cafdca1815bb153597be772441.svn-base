@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spfood.wos.workOrder.intf.domain.ReceiveTask" >
+  <resultMap id="BaseResultMap" type="com.spfood.wos.workOrder.intf.domain.ReceiveTask" >
+    <id column="RECCODE" property="recCode" jdbcType="VARCHAR" />
+    <result column="RECID" property="recId" jdbcType="BIGINT" />
+    <result column="TASKTIME" property="taskTime" jdbcType="TIMESTAMP" />
+    <result column="AREA" property="area" jdbcType="VARCHAR" />
+    <result column="TASKNUM" property="taskNum" jdbcType="INTEGER" />
+    <result column="AREANAME" property="areaName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    RECCODE, RECID, TASKTIME, AREA, TASKNUM,AREANAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wos_receive_task
+    where RECCODE = #{recCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from wos_receive_task
+    where RECCODE = #{recCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.spfood.wos.workOrder.intf.domain.ReceiveTask" >
+    insert into wos_receive_task (RECCODE, 
+      TASKTIME, AREA, 
+      TASKNUM,AREANAME)
+    values (#{recCode,jdbcType=VARCHAR}, 
+      #{taskTime,jdbcType=TIMESTAMP}, #{area,jdbcType=VARCHAR}, 
+      #{taskNum,jdbcType=INTEGER},#{areaName,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertInBatch" parameterType="java.util.List">
+     insert into wos_receive_task (RECCODE, 
+      TASKTIME, AREA, 
+      TASKNUM,AREANAME)
+    values
+    <foreach item="receiveTask" index="index" collection="list" separator=",">  
+	    (#{receiveTask.recCode,jdbcType=VARCHAR}, 
+      #{receiveTask.taskTime,jdbcType=TIMESTAMP}, #{receiveTask.area,jdbcType=VARCHAR}, 
+      #{receiveTask.taskNum,jdbcType=INTEGER},#{receiveTask.areaName,jdbcType=VARCHAR})
+	</foreach>;
+    <foreach item="receiveTask" index="index" collection="list" separator=";">  
+	   <if test="receiveTask.goodsList != null and receiveTask.goodsList.size() > 0">
+	      insert into wos_receive_task_goods (CODE, RECCODE, TYPE, TYPENAME,
+	      NAME, STANDARD, 
+	      RECEIVETOTAL, UNIT)
+	    values
+	    <foreach item="receiveTaskGoods" index="index" collection="receiveTask.goodsList" separator=",">  
+		   (#{receiveTaskGoods.code,jdbcType=VARCHAR}, #{receiveTaskGoods.recCode,jdbcType=VARCHAR}, 
+	      #{receiveTaskGoods.type,jdbcType=VARCHAR},#{receiveTaskGoods.typeName,jdbcType=VARCHAR},#{receiveTaskGoods.name,jdbcType=VARCHAR}, 
+	      #{receiveTaskGoods.standard,jdbcType=INTEGER}, 
+	      #{receiveTaskGoods.receiveTotal,jdbcType=INTEGER}, #{receiveTaskGoods.unit,jdbcType=VARCHAR})
+		</foreach>
+	   </if>
+	</foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.spfood.wos.workOrder.intf.domain.ReceiveTask" >
+    insert into wos_receive_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recCode != null" >
+        RECCODE,
+      </if>
+      <if test="taskTime != null" >
+        TASKTIME,
+      </if>
+      <if test="area != null" >
+        AREA,
+      </if>
+      <if test="taskNum != null" >
+        TASKNUM,
+      </if>
+      <if test="areaName != null" >
+        AREANAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recCode != null" >
+        #{recCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskTime != null" >
+        #{taskTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="taskNum != null" >
+        #{taskNum,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.spfood.wos.workOrder.intf.domain.ReceiveTask" >
+    update wos_receive_task
+    <set >
+      <if test="recId != null" >
+        RECID = #{recId,jdbcType=BIGINT},
+      </if>
+      <if test="taskTime != null" >
+        TASKTIME = #{taskTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null" >
+        AREA = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="taskNum != null" >
+        TASKNUM = #{taskNum,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null" >
+        AREANAME = #{areaName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RECCODE = #{recCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.spfood.wos.workOrder.intf.domain.ReceiveTask" >
+    update wos_receive_task
+    set RECID = #{recId,jdbcType=BIGINT},
+      TASKTIME = #{taskTime,jdbcType=TIMESTAMP},
+      AREA = #{area,jdbcType=VARCHAR},
+      TASKNUM = #{taskNum,jdbcType=INTEGER},
+      AREANAME = #{areaName,jdbcType=VARCHAR}
+    where RECCODE = #{recCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

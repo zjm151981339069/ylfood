@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="  
+        http://www.springframework.org/schema/beans   
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+        http://code.alibabatech.com/schema/dubbo        
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">  
+    <!-- dubbo service configuration -->
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="OMS-OrderPay-Service"  />
+ 
+    <!-- 用dubbo协议在20885端口暴露服务,使用的默认传输协议netty，默认序列化 方式hessian2-->
+    <dubbo:protocol name="dubbo" port="21892" />
+ 
+    <!-- 声明需要暴露的服务接口 -->    
+    <dubbo:service interface="com.spfood.oms.orderpay.intf.OrderPayByACPService" ref="orderPayByACPService" timeout="6000" retries="0"/> 
+    <dubbo:service interface="com.spfood.oms.orderpay.intf.OrderPayByAliPayService" ref="orderPayByAliPayService" timeout="6000" retries="0"/> 
+    <dubbo:service interface="com.spfood.oms.orderpay.intf.OrderPayByWeiChatService" ref="orderPayByWeiChatService" timeout="6000" retries="0"/>
+   
+    <!-- 从注册中心发现监控中心 -->
+    <dubbo:monitor protocol="registry"/> 
+    <!-- 调用订单管理服务 -->
+     <dubbo:reference id ="orderManagerService" interface="com.spfood.oms.order.intf.OrderManagerService"  check="false"  timeout="6000"  />
+    <!-- 订单状态服务 -->
+     <dubbo:reference id ="orderStatusSynService" interface="com.spfood.oms.orderinfosyn.intf.OrderStatusSynService"  check="false"  timeout="6000" />    
+</beans>       

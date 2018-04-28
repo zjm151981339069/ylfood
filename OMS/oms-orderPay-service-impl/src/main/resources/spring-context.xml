@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans.xsd  
+                        http://www.springframework.org/schema/aop  
+                        http://www.springframework.org/schema/aop/spring-aop.xsd  
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/tx  
+                        http://www.springframework.org/schema/tx/spring-tx.xsd 
+                        http://www.springframework.org/schema/task
+                        http://www.springframework.org/schema/task/spring-task.xsd
+                        http://code.alibabatech.com/schema/dubbo        
+                        http://code.alibabatech.com/schema/dubbo/dubbo.xsd 
+                        http://www.springframework.org/schema/mvc  
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 自动扫描 -->
+    <context:component-scan base-package="com.spfood.*" />  
+    
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+	  <property name="locations">
+	    <list>
+	     <value>classpath:environments/${env}.properties</value>
+	   </list>
+	 </property>
+	</bean>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+	  <property name="properties" ref="configProperties"/>
+	</bean>
+
+    <!-- Message 的配置 -->
+    <bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="useCodeAsDefaultMessage" value="true" />
+        <property name="cacheSeconds" value="10"></property>
+        <property name="basenames">
+            <list>
+                <value>classpath:messages/messages</value>
+                <value>classpath:messages/exceptions</value>
+                <value>classpath:kernel-exceptions</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="paginationInterceptor" class="com.spfood.kernel.dao.PageHelper"/>
+
+    <!-- 启动注解 -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!-- 支付宝客户端 -->
+    <bean id="client" class="com.alipay.api.DefaultAlipayClient">
+      <constructor-arg index="0" value="${wap.alipay.url}"/>
+      <constructor-arg index="1" value="${wap.alipay.appid}"/>
+      <constructor-arg index="2" value="${wap.alipay.rsa_private_key}"/>
+      <constructor-arg index="3" value="${wap.alipay.format}"/>
+      <constructor-arg index="4" value="${wap.alipay.charset}"/>
+      <constructor-arg index="5" value="${wap.alipay.alipay_public_key}"/>
+    </bean>  
+
+
+     
+    <!-- 和本地bean一样实现服务 -->    
+    <bean id="orderPayByACPService" class="com.spfood.oms.orderpay.impl.OrderPayByACPServiceImpl" />
+    <bean id="orderPayByAliPayService" class="com.spfood.oms.orderpay.impl.OrderPayByAliPayServiceImpl" />
+    <bean id="orderPayByWeiChatService" class="com.spfood.oms.orderpay.impl.OrderPayByWeiChatServiceImpl" />
+    
+    <bean id="autoLoadServlet" lazy-init="false" class="com.spfood.oms.orderpay.pay.acppay.sdk.AutoLoadServlet" init-method="init"/>
+      
+</beans>

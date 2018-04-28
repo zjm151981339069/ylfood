@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spfood.oms.order.intf.domain.OrderCommodity" >
+  <resultMap id="BaseResultMap" type="com.spfood.oms.order.intf.domain.OrderCommodity" >
+    <id column="ORDERNO" property="orderNo" jdbcType="VARCHAR" />
+    <result column="COMID" property="comId" jdbcType="BIGINT" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="TYPENAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="PRICE" property="price" jdbcType="DECIMAL" />
+    <result column="ACTPRICE" property="actPrice" jdbcType="DECIMAL" />
+    <result column="COUNT" property="count" jdbcType="INTEGER" />
+    <result column="SUBTOTAL" property="subTotal" jdbcType="DECIMAL" />
+    <result column="ISPACKAGE" property="isPackage" jdbcType="INTEGER" />
+    <result column="PICTUREURL" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="AREACODE" property="areaCode" jdbcType="VARCHAR" />
+    <result column="AREANAME" property="areaName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ORDERNO, COMID, CODE, NAME, TYPE,TYPENAME,PRICE, ACTPRICE, COUNT, SUBTOTAL, ISPACKAGE, PICTUREURL, AREACODE, AREANAME
+  </sql>
+  
+   <sql id="where_query" >
+	  <where >
+	      <if test="orderNo != null" >
+	         AND ORDERNO = #{orderNo}
+	      </if>
+	    </where>
+  </sql>
+  <select id="select" resultMap="BaseResultMap" parameterType="com.spfood.oms.order.intf.domain.OrderCommodity" >
+    select 
+    <include refid="Base_Column_List" />
+    from oms_order_commodity
+    <include refid="where_query"/>
+  </select>
+  
+  <select id="selectOrderCommodityByOrderNoList" resultMap="BaseResultMap" parameterType="java.util.List">
+    select 
+    <include refid="Base_Column_List"/>
+    from oms_order_commodity
+    where ORDERNO in
+  	  <foreach item="orderNo" index="index" collection="list" open="(" separator="," close=")">  
+	  	 #{orderNo,jdbcType=VARCHAR}
+	  </foreach>
+  </select>
+  
+  <insert id="insert" parameterType="com.spfood.oms.order.intf.domain.OrderCommodity" >
+    insert into oms_order_commodity (ORDERNO, CODE, 
+      NAME, TYPE,TYPENAME,PRICE, ACTPRICE, 
+      COUNT, SUBTOTAL, ISPACKAGE, 
+      PICTUREURL, AREACODE, AREANAME)
+    values (#{orderNo,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{actPrice,jdbcType=DECIMAL}, #{count,jdbcType=INTEGER}, #{subTotal,jdbcType=DECIMAL}, #{isPackage,jdbcType=INTEGER}, 
+      #{pictureUrl,jdbcType=VARCHAR}, #{areaCode,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertInBatch" parameterType="java.util.List">
+    insert into oms_order_commodity (ORDERNO, CODE, 
+      NAME, TYPE,TYPENAME,PRICE, ACTPRICE, 
+      COUNT, SUBTOTAL, ISPACKAGE, 
+      PICTUREURL, AREACODE, AREANAME)
+    values 
+    <foreach item="commodity" index="index" collection="list" separator=",">  
+	    (#{commodity.orderNo,jdbcType=VARCHAR}, #{commodity.code,jdbcType=VARCHAR}, 
+	      #{commodity.name,jdbcType=VARCHAR}, #{commodity.type,jdbcType=VARCHAR}, #{commodity.typeName,jdbcType=VARCHAR}, 
+	      #{commodity.price,jdbcType=DECIMAL}, #{commodity.actPrice,jdbcType=DECIMAL}, 
+	      #{commodity.count,jdbcType=INTEGER}, #{commodity.subTotal,jdbcType=DECIMAL}, #{commodity.isPackage,jdbcType=INTEGER}, 
+	      #{commodity.pictureUrl,jdbcType=VARCHAR}, #{commodity.areaCode,jdbcType=VARCHAR}, #{commodity.areaName,jdbcType=VARCHAR})
+	</foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.spfood.oms.order.intf.domain.OrderCommodity" >
+    insert into oms_order_commodity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        ORDERNO,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="typeName != null" >
+        TYPENAME,
+      </if>
+      <if test="price != null" >
+        PRICE,
+      </if>
+      <if test="actPrice != null" >
+        ACTPRICE,
+      </if>
+      <if test="count != null" >
+        COUNT,
+      </if>
+      <if test="subTotal != null" >
+        SUBTOTAL,
+      </if>
+      <if test="isPackage != null" >
+        ISPACKAGE,
+      </if>
+      <if test="pictureUrl != null" >
+        PICTUREURL,
+      </if>
+      <if test="areaCode != null" >
+        AREACODE,
+      </if>
+      <if test="areaName != null" >
+        AREANAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="actPrice != null" >
+        #{actPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="count != null" >
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="subTotal != null" >
+        #{subTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="isPackage != null" >
+        #{isPackage,jdbcType=INTEGER},
+      </if>
+      <if test="pictureUrl != null" >
+        #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+   <resultMap id="orderCommodityMap" type="com.spfood.oms.order.intf.domain.OrderCommodity" >
+    		<result column="orderno" property="orderNo" jdbcType="VARCHAR" />
+		    <result column="code" property="code" jdbcType="VARCHAR" />
+		    <result column="name" property="name" jdbcType="VARCHAR" />
+		    <result column="count" property="count" jdbcType="INTEGER" />
+		    <result column="pictureurl" property="pictureUrl" jdbcType="VARCHAR" />
+        
+  </resultMap>
+  
+</mapper>

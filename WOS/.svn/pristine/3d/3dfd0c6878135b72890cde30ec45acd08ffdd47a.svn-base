@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans.xsd  
+                        http://www.springframework.org/schema/aop  
+                        http://www.springframework.org/schema/aop/spring-aop.xsd  
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/tx  
+                        http://www.springframework.org/schema/tx/spring-tx.xsd  
+                        http://www.springframework.org/schema/mvc  
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://code.alibabatech.com/schema/dubbo        
+                        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+                        
+	<!-- 自动扫描 -->
+	<context:component-scan base-package="com.spfood.*" />
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+      <property name="locations">
+        <list>
+         <value>classpath*:environments/local.properties</value>
+       </list>
+     </property>
+    </bean>
+	<!-- Message 的配置 -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:messages/messages</value>
+                <value>classpath:messages/exceptions</value>
+                <value>classpath:kernel-exceptions</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="cacheSeconds" value="3600"/>
+        <property name="useCodeAsDefaultMessage" value="true" />
+    </bean>
+	
+	<bean id="paginationInterceptor" class="com.spfood.kernel.dao.PageHelper"/>
+
+<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:/mybatis-xml/*.xml"/>
+		<property name="plugins">  
+            <ref bean="paginationInterceptor"/>  
+        </property>   
+	</bean>
+    <bean name="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+
+	<!-- 配置事物管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 启动注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- 在对应的方法上面添加事物 注解 -->
+	<!--@Transactional -->
+	
+	  <!-- 线程池配置 -->
+    <bean id ="taskExecutor"  class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" >
+        <property name ="corePoolSize" value ="50" />
+        <property name ="keepAliveSeconds" value ="300" />
+        <property name ="maxPoolSize" value ="80" />
+        <property name ="queueCapacity" value ="35" />
+    </bean>
+    <bean id="workOrderService" class="com.spfood.wos.workOrder.impl.WorkOrderServiceImpl" /><!-- 
+     --><!-- 定时调度执行订单拆分操作 -->
+     <bean id="houseOrderService" class="com.spfood.wos.workOrder.impl.HouseOrderServiceImpl"/>
+    <bean id="operateHouseOrderQuartz" class="com.spfood.wos.workOrder.impl.WorkOrderServiceImpl"/>
+
+
+</beans>

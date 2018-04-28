@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spfood.oms.cart.intf.domain.Cart" >
+
+  <resultMap id="CartResultMap" type="com.spfood.oms.cart.intf.domain.Cart" >
+    <id column="cartcode" property="cartCode" jdbcType="VARCHAR" />
+    <result column="cartid" property="cartId" jdbcType="BIGINT" />
+    <result column="customercode" property="customerCode" jdbcType="VARCHAR" />
+    <result column="carttype" property="cartType" jdbcType="INTEGER" />
+    <result column="lasttime" property="lastTime" jdbcType="TIMESTAMP" />
+    
+	  <collection property="commodityList" ofType="com.spfood.oms.cart.intf.domain.CartCommodity" column="pid">  
+        <id column="comcode" property="comCode" jdbcType="BIGINT" />
+	    <result column="ccid" property="ccId" jdbcType="BIGINT" />
+	    <result column="cartcodec" property="cartCode" jdbcType="VARCHAR" />
+	    <result column="orderno" property="orderNo" jdbcType="VARCHAR" />
+	    <result column="comname" property="comName" jdbcType="VARCHAR" />
+	    <result column="peoperties" property="peoperties" jdbcType="VARCHAR" />
+	    <result column="amount" property="amount" jdbcType="INTEGER" />
+	    <result column="price" property="price" jdbcType="REAL" />
+	    <result column="sum" property="sum" jdbcType="REAL" />
+	    <result column="status" property="status" jdbcType="INTEGER" />
+	    <result column="addtime" property="addTime" jdbcType="TIMESTAMP" />
+	    <result column="lasttime" property="lastTime" jdbcType="TIMESTAMP" />
+	    <result column="comments" property="comments" jdbcType="VARCHAR" />
+	    <result column="pictureurl" property="pictureUrl" jdbcType="VARCHAR" /> 
+    </collection> 
+    
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.spfood.oms.cart.intf.domain.Cart" >
+    	 insert into oms_cart (cartcode,customercode,lasttime) values (#{cartCode,jdbcType=VARCHAR},#{customerCode,jdbcType=VARCHAR},#{lastTime,jdbcType=TIMESTAMP}); 
+    	 <if test="commodityList != null and commodityList.size() != 0 ">  
+         insert into oms_cart_commodity (cartcode,comcode,amount,addtime,lasttime,pictureurl) values  
+         <foreach collection="commodityList" item="item" index="index" separator="," >  
+		 (#{item.cartCode,jdbcType=VARCHAR},#{item.comCode,jdbcType=VARCHAR},#{item.amount,jdbcType=INTEGER},#{item.addTime,jdbcType=TIMESTAMP},#{item.lastTime,jdbcType=TIMESTAMP},#{item.pictureUrl,jdbcType=VARCHAR})
+		 </foreach> 
+         </if>   
+  </insert> 
+  
+  
+ <select id="select" resultMap="CartResultMap" parameterType="com.spfood.oms.cart.intf.domain.Cart" >
+    SELECT t.cartid,t.cartcode,t.customercode,c.cartcode cartcodec,c.comcode, c.ccid, c.orderno, c.comname, c.peoperties, c.amount, c.price, c.sum, c.status, 
+    	c.addtime, c.lasttime, c.comments,c.pictureurl FROM oms_cart t LEFT JOIN oms_cart_commodity c ON c.cartcode = t.cartcode 
+	WHERE t.customercode = #{customerCode,jdbcType=VARCHAR}  
+    order by c.addtime desc 
+  </select>
+  
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.spfood.oms.cart.intf.domain.Cart" >
+    SELECT COALESCE(sum(c.amount),0) FROM oms_cart_commodity c LEFT JOIN oms_cart t ON c.cartCode = t.cartCode 
+	WHERE t.customercode = #{customerCode,jdbcType=VARCHAR}  
+  </select>
+  
+  
+</mapper>

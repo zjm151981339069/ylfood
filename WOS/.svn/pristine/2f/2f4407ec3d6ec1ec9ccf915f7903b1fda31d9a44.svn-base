@@ -1,0 +1,8 @@
+wos.houseOrderCommodity.dao.updateTaskCodeInBatch=Error occured while update {0} using sql {1} with parameter {2}
+
+wos.service.createTask=wos.service.createTask is error with parameter {0}
+wos.service.zkclient=wos.service.zkclient is error about {0}
+wos.service.quartz=wos.service.quartz is error about {0}
+wos.service.quartz.createWorkOrder=wos.service.createWorkOrder is error about {0}
+wos.service.messageQueue=wos.service.messageQueue is error about {0}
+wos.service.properties=wos.service.properties is error about {0}

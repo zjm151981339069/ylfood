@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans.xsd  
+                        http://www.springframework.org/schema/aop  
+                        http://www.springframework.org/schema/aop/spring-aop.xsd  
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/tx  
+                        http://www.springframework.org/schema/tx/spring-tx.xsd 
+                        http://www.springframework.org/schema/task
+                        http://www.springframework.org/schema/task/spring-task.xsd 
+                              http://code.alibabatech.com/schema/dubbo        
+                        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+                        http://www.springframework.org/schema/mvc  
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+                        
+	<bean id="workOrderService" class="com.spfood.wos.workOrder.impl.WorkOrderServiceImpl"/>
+    <!-- 定时器配置 -->
+    <bean id="createWorkOrder" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass">
+            <value>com.spfood.wos.workOrder.utils.MyDetailQuartzJobBean</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="targetObject" value="workOrderService" />
+                <entry key="targetMethod" value="createWorkOrderByHouseOrder" />
+            </map>
+        </property>
+    </bean>
+    <!-- 定义时间间隔触发器 -->
+    <bean id="createWorkOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="createWorkOrder" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0/5 * * * ?</value>
+        </property>
+    </bean> 
+    <!-- 启动定时器 -->
+    <bean id="wosScheduler" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="configLocation" value="classpath:environments/local.properties" />
+        <property name="triggers">
+            <list>
+                <ref bean="createWorkOrderTrigger" />
+                <ref bean="sortTaskScheduleTimeModifyTrigger" />
+                <ref bean="createWorkOrderBycollectCountTrigger"/>
+            </list>
+        </property>
+        <property name="applicationContextSchedulerContextKey" value="applicationContext" />
+    </bean>
+    <!-- 根据ocs的营业时间和集单时间间隔修改分拣任务定时调度 -->
+    <bean id="createTaskService" class="com.spfood.wos.workOrder.impl.CreateTaskServiceImpl"/>
+    <!-- 定时器配置 -->
+    <bean id="sortTaskScheduleTimeModifyJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass">
+            <value>com.spfood.wos.workOrder.utils.MyDetailQuartzJobBean</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="targetObject" value="createTaskService" />
+                <entry key="targetMethod" value="sortTaskScheduleTimeModify" />
+            </map>
+        </property>
+    </bean>
+    <!-- 定义时间间隔触发器 -->
+    <bean id="sortTaskScheduleTimeModifyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="sortTaskScheduleTimeModifyJob" />
+        </property>
+        <property name="cronExpression" >
+            <value>${sortTaskSchedule.frequency}</value>
+        </property>
+    </bean> 
+    
+    
+    <!-- 根据ocs的集单数量设置决定是否生成工单 -->
+    <!-- 定时器配置 -->
+    <bean id="createWorkOrderBycollectCountJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass">
+            <value>com.spfood.wos.workOrder.utils.MyDetailQuartzJobBean</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="targetObject" value="createTaskService" />
+                <entry key="targetMethod" value="createWorkOrderByCollectCount" />
+            </map>
+        </property>
+    </bean>
+    <!-- 定义时间间隔触发器 -->
+    <bean id="createWorkOrderBycollectCountTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="createWorkOrderBycollectCountJob" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0/1 * * * ?</value>
+        </property>
+    </bean> 
+</beans>

@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.spfood</groupId>
+  <artifactId>oms-orderPay-service-intf</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>oms-orderPay-service-intf</name>
+  <url>http://maven.apache.org</url>
+
+   <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+
+     
+    <parent>
+		<groupId>com.spfood</groupId>
+		<artifactId>spfood-site</artifactId>
+		<version>0.0.2-SNAPSHOT</version>
+	</parent>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.spfood</groupId>
+            <artifactId>kernel</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>${javax-servlet.version}</version>
+		    <scope>provided</scope> 
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		
+
+        <dependency>
+            <groupId>com.spfood</groupId>
+            <artifactId>oms-domain-service-intf</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        
+         
+        <dependency>
+		    <groupId>org.bouncycastle</groupId>
+		    <artifactId>bcprov-jdk16</artifactId>
+		    <version>1.46</version>
+		</dependency>
+    </dependencies>
+
+    <pluginRepositories>
+		<pluginRepository>
+			<id>SPFoodPluginRepository</id>
+			<name>SPFoodPluginRepository</name>
+			<url>http://10.8.48.232:9090/nexus/content/groups/public/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>SPfoodRepository</id>
+			<name>SPfoodRepository</name>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<url>http://10.8.48.232:9090/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>SPFood-Release</id>
+			<name>Local Nexus Repository</name>
+			<url>http://10.8.48.232:9090/nexus/content/repositories/SPFoodRelease/</url>
+		</repository>
+		<snapshotRepository>
+			<id>SPFood-Snapshot</id>
+			<name>Local Nexus Repository</name>
+			<url>http://10.8.48.232:9090/nexus/content/repositories/SPFoodSnapshot/</url>
+		</snapshotRepository>
+	</distributionManagement>
+    
+</project>

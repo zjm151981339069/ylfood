@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spfood.oms.order.intf.domain.Order" >
+  <resultMap id="orderResultMap" type="com.spfood.oms.order.intf.domain.Order" >
+    <id column="ORDERNO" property="orderNo" jdbcType="VARCHAR" />
+    <result column="ORDERID" property="orderId" jdbcType="BIGINT" />
+    <result column="TYPE" property="type" jdbcType="INTEGER" />
+    <result column="CUSTOMER" property="customer" jdbcType="VARCHAR" />
+    <result column="CUSTOMERCODE" property="customerCode" jdbcType="VARCHAR" />
+    <result column="REPCUSTOMER" property="repCustomer" jdbcType="VARCHAR" />
+    <result column="REPCUSTOMERCODE" property="repCustomerCode" jdbcType="VARCHAR" />
+    <result column="RECEIVER" property="receiver" jdbcType="VARCHAR" />
+    <result column="RECEIVERCODE" property="receiverCode" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="ZONE" property="zone" jdbcType="VARCHAR" />
+    <result column="CITYCODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="CITYNAME" property="cityName" jdbcType="VARCHAR" />
+    <result column="ADDR" property="addr" jdbcType="VARCHAR" />
+    <result column="CARRIAGE" property="carriage" jdbcType="DECIMAL" />
+    <result column="DELIVERTIME" property="deliverTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+    <result column="MODIFIERCODE" property="modifierCode" jdbcType="VARCHAR" />
+    <result column="MODIFYTIME" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="SITE" property="site" jdbcType="VARCHAR" />
+    <result column="SITECODE" property="siteCode" jdbcType="VARCHAR" />
+    <result column="ISBILL" property="isBill" jdbcType="INTEGER" />
+    <result column="BILLTYPE" property="billType" jdbcType="INTEGER" />
+    <result column="BILLTITLE" property="billTitle" jdbcType="INTEGER" />
+    <result column="BILLCONTENT" property="billContent" jdbcType="VARCHAR" />
+    <result column="USERCOMMENTS" property="userComments" jdbcType="VARCHAR" />
+    <result column="ORDERAMOUNT" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="COMAMOUNT" property="comAmount" jdbcType="DECIMAL" />
+    <result column="DISCOUNT" property="discount" jdbcType="DECIMAL" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="CREATETIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="SIGN" property="sign" jdbcType="VARCHAR" />
+    <result column="VERIFICATION" property="verification" jdbcType="VARCHAR" />
+    <!-- 订单的支付信息 -->
+    <association property="orderPay" javaType="com.spfood.oms.order.intf.domain.OrderPay" >
+    		<id column="PAYID" property="payId" jdbcType="BIGINT" />
+		    <result column="ORDERNO1" property="orderNo" jdbcType="VARCHAR" />
+		    <result column="ISPAY" property="isPay" jdbcType="INTEGER" />
+		    <result column="PAYSUM" property="paySum" jdbcType="DECIMAL" />
+		    <result column="PAYTIME" property="payTime" jdbcType="TIMESTAMP" />
+		    <result column="PAYTYPE" property="payType" jdbcType="INTEGER" />
+		    <result column="TRANSCATION" property="transcation" jdbcType="VARCHAR" />
+		    <result column="PAYEE" property="payee" jdbcType="VARCHAR" />
+		    <result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
+		    <result column="ISARRIVED" property="isArrived" jdbcType="INTEGER" />
+    </association>
+    <!-- 订单的商品 -->
+    <collection property="orderCommList" ofType="com.spfood.oms.order.intf.domain.OrderCommodity" column="pid">  
+            <id column="COMID" property="comId" jdbcType="BIGINT" />
+		    <result column="ORDERNO2" property="orderNo" jdbcType="VARCHAR" />
+		    <result column="CODE" property="code" jdbcType="VARCHAR" />
+		    <result column="NAME" property="name" jdbcType="VARCHAR" />
+		    <result column="TYPE2" property="type" jdbcType="VARCHAR" />
+		    <result column="TYPENAME" property="typeName" jdbcType="VARCHAR" />
+		    <result column="PRICE" property="price" jdbcType="DECIMAL" />
+		    <result column="ACTPRICE" property="actPrice" jdbcType="DECIMAL" />
+		    <result column="COUNT" property="count" jdbcType="INTEGER" />
+		    <result column="SUBTOTAL" property="subTotal" jdbcType="DECIMAL" />
+		    <result column="ISPACKAGE" property="isPackage" jdbcType="INTEGER" /> 
+    		<result column="PICTUREURL" property="pictureUrl" jdbcType="VARCHAR" />
+    		<result column="AREACODE" property="areaCode" jdbcType="VARCHAR" />
+    		<result column="AREANAME" property="areaName" jdbcType="VARCHAR" />
+    </collection>  
+    <!-- 订单的日志信息 -->
+    <collection property="orderLogList" ofType="com.spfood.oms.order.intf.domain.OrderLog" column="pid">  
+            <id column="OPRID" property="oprId" jdbcType="BIGINT" />
+		    <result column="ORDERNO3" property="orderNo" jdbcType="VARCHAR" />
+		    <result column="OPRTIME" property="oprTime" jdbcType="TIMESTAMP" />
+		    <result column="OPRCONTENT" property="oprContent" jdbcType="VARCHAR" />
+		    <result column="OPRATOR" property="oprator" jdbcType="VARCHAR" />
+		    <result column="OPRATORCODE" property="opratorCode" jdbcType="VARCHAR" />
+    </collection> 
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ORDERNO, ORDERID, TYPE, CUSTOMER, CUSTOMERCODE, REPCUSTOMER, REPCUSTOMERCODE, RECEIVER, 
+    RECEIVERCODE, PHONE, ZONE, CITYCODE, CITYNAME, ADDR, CARRIAGE, DELIVERTIME, MODIFIER, MODIFIERCODE, MODIFYTIME, 
+    SITE, SITECODE, ISBILL, BILLTYPE, BILLTITLE, BILLCONTENT, USERCOMMENTS, ORDERAMOUNT, COMAMOUNT, 
+    DISCOUNT, STATUS, CREATETIME, SIGN, VERIFICATION
+  </sql>
+   <sql id="Base_Column_Detail_List" >
+    o.orderNo, o.orderId, o.type, o.customer, o.customerCode,o.repCustomer,o.repCustomerCode, o.receiver, o.receiverCode, o.phone, o.zone, o.cityCode, o.cityName, o.addr, o.carriage, o.deliverTime, 
+    o.modifier, o.modifierCode, o.modifyTime, o.site, o.siteCode, o.isBill, o.billType, o.billTitle, o.billContent, o.userComments, o.comAmount, o.orderAmount, 
+    o.discount, o.status, o.createTime,o.sign,o.verification,
+    p.payId, p.orderNo orderNo1, p.isPay, p.paySum, p.payTime, p.payType, p.transcation, p.payee, p.account, p.isArrived,
+    c.comId, c.orderNo orderNo2, c.code, c.type type2, c.typeName, c.name, c.price, c.actPrice, c.count, c.subTotal, c.isPackage,c.pictureUrl,c.areaCode,c.areaName,
+    l.oprId,l.orderNo orderNo3,l.oprTime,l.oprContent,l.oprator,l.opratorCode
+  </sql>
+  <select id="selectOrderByOrderNo" resultMap="orderResultMap" parameterType="com.spfood.oms.order.intf.domain.Order" >
+    select 
+    <include refid="Base_Column_List" />
+    from oms_order
+    where ORDERNO = #{orderNo,jdbcType=VARCHAR}
+  </select>
+  <select id="selectOrderListByOrderNos" resultMap="orderResultMap"  parameterType="java.util.List">
+    select 
+    <include refid="Base_Column_List" />
+    from oms_order
+    where ORDERNO in
+      <foreach item="orderNo" index="index" collection="list " open="(" separator="," close=")">
+	  	 #{orderNo,jdbcType=VARCHAR}
+	  </foreach>
+  </select>
+  <insert id="insert" parameterType="com.spfood.oms.order.intf.domain.Order" >
+    insert into oms_order (ORDERNO, TYPE, 
+      CUSTOMER, CUSTOMERCODE, REPCUSTOMER, 
+      REPCUSTOMERCODE, RECEIVER, RECEIVERCODE, 
+      PHONE, ZONE, CITYCODE, CITYNAME, ADDR, 
+      CARRIAGE, DELIVERTIME, MODIFIER, 
+      MODIFIERCODE, MODIFYTIME, SITE, SITECODE, 
+      ISBILL, BILLTYPE, BILLTITLE, 
+      BILLCONTENT, USERCOMMENTS, ORDERAMOUNT, 
+      COMAMOUNT, DISCOUNT, STATUS, 
+      CREATETIME, SIGN, VERIFICATION)
+    values (#{orderNo,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{customer,jdbcType=VARCHAR}, #{customerCode,jdbcType=VARCHAR}, #{repCustomer,jdbcType=VARCHAR}, 
+      #{repCustomerCode,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{receiverCode,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{zone,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, 
+      #{carriage,jdbcType=DECIMAL}, #{deliverTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, 
+      #{modifierCode,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{site,jdbcType=VARCHAR}, #{siteCode,jdbcType=VARCHAR}, 
+      #{isBill,jdbcType=INTEGER}, #{billType,jdbcType=INTEGER}, #{billTitle,jdbcType=INTEGER}, 
+      #{billContent,jdbcType=VARCHAR}, #{userComments,jdbcType=VARCHAR}, #{orderAmount,jdbcType=DECIMAL}, 
+      #{comAmount,jdbcType=DECIMAL}, #{discount,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{sign,jdbcType=VARCHAR}, #{verification,jdbcType=VARCHAR});
+    <if test="orderCommList != null and orderCommList.size() > 0">
+	    insert into oms_order_commodity (ORDERNO, CODE, 
+	      NAME, TYPE,TYPENAME,PRICE, ACTPRICE, 
+	      COUNT, SUBTOTAL, ISPACKAGE, 
+	      PICTUREURL, AREACODE, AREANAME)
+	    values 
+	    <foreach item="commodity" index="index" collection="orderCommList" separator=",">  
+		    (#{commodity.orderNo,jdbcType=VARCHAR}, #{commodity.code,jdbcType=VARCHAR}, 
+		      #{commodity.name,jdbcType=VARCHAR}, #{commodity.type,jdbcType=VARCHAR}, #{commodity.typeName,jdbcType=VARCHAR}, 
+		      #{commodity.price,jdbcType=DECIMAL}, #{commodity.actPrice,jdbcType=DECIMAL}, 
+		      #{commodity.count,jdbcType=INTEGER}, #{commodity.subTotal,jdbcType=DECIMAL}, #{commodity.isPackage,jdbcType=INTEGER}, 
+		      #{commodity.pictureUrl,jdbcType=VARCHAR}, #{commodity.areaCode,jdbcType=VARCHAR}, #{commodity.areaName,jdbcType=VARCHAR})
+		</foreach>;
+	</if>
+	<if test="orderTemp != null">
+		insert into oms_order_temp (ORDERNO, STATUS, 
+	      CREATETIME)
+	    values (#{orderTemp.orderNo,jdbcType=VARCHAR}, #{orderTemp.status,jdbcType=INTEGER}, 
+	      #{orderTemp.createTime,jdbcType=TIMESTAMP});
+	</if>
+	
+	<if test="orderPay != null">
+	    insert into oms_order_pay (ORDERNO, ISPAY, 
+	      PAYSUM, PAYTIME, PAYTYPE, 
+	      TRANSCATION, PAYEECODE, PAYEE, 
+	      ACCOUNT, ISARRIVED, ISSENDFMS)
+	    values (#{orderPay.orderNo,jdbcType=VARCHAR}, #{orderPay.isPay,jdbcType=INTEGER}, 
+	      #{orderPay.paySum,jdbcType=DECIMAL}, #{orderPay.payTime,jdbcType=TIMESTAMP}, #{orderPay.payType,jdbcType=INTEGER}, 
+	      #{orderPay.transcation,jdbcType=VARCHAR}, #{orderPay.payeeCode,jdbcType=VARCHAR}, #{orderPay.payee,jdbcType=VARCHAR}, 
+	      #{orderPay.account,jdbcType=VARCHAR}, #{orderPay.isArrived,jdbcType=INTEGER}, #{orderPay.isSendFms,jdbcType=INTEGER})
+	</if>
+	
+  </insert>
+  <insert id="insertSelective" parameterType="com.spfood.oms.order.intf.domain.Order" >
+    insert into oms_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        ORDERNO,
+      </if>
+      <if test="orderId != null" >
+        ORDERID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="customer != null" >
+        CUSTOMER,
+      </if>
+      <if test="customerCode != null" >
+        CUSTOMERCODE,
+      </if>
+      <if test="repCustomer != null" >
+        REPCUSTOMER,
+      </if>
+      <if test="repCustomerCode != null" >
+        REPCUSTOMERCODE,
+      </if>
+      <if test="receiver != null" >
+        RECEIVER,
+      </if>
+      <if test="receiverCode != null" >
+        RECEIVERCODE,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="zone != null" >
+        ZONE,
+      </if>
+      <if test="cityCode != null" >
+        cityCode,
+      </if>
+      <if test="cityName != null" >
+        cityName,
+      </if>
+      <if test="addr != null" >
+        ADDR,
+      </if>
+      <if test="carriage != null" >
+        CARRIAGE,
+      </if>
+      <if test="deliverTime != null" >
+        DELIVERTIME,
+      </if>
+      <if test="modifier != null" >
+        MODIFIER,
+      </if>
+      <if test="modifierCode != null" >
+        MODIFIERCODE,
+      </if>
+      <if test="modifyTime != null" >
+        MODIFYTIME,
+      </if>
+      <if test="site != null" >
+        SITE,
+      </if>
+      <if test="siteCode != null" >
+        SITECODE,
+      </if>
+      <if test="isBill != null" >
+        ISBILL,
+      </if>
+      <if test="billType != null" >
+        BILLTYPE,
+      </if>
+      <if test="billTitle != null" >
+        BILLTITLE,
+      </if>
+      <if test="billContent != null" >
+        BILLCONTENT,
+      </if>
+      <if test="userComments != null" >
+        USERCOMMENTS,
+      </if>
+      <if test="orderAmount != null" >
+        ORDERAMOUNT,
+      </if>
+      <if test="comAmount != null" >
+        COMAMOUNT,
+      </if>
+      <if test="discount != null" >
+        DISCOUNT,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createTime != null" >
+        CREATETIME,
+      </if>
+      <if test="sign != null" >
+        SIGN,
+      </if>
+      <if test="verification != null" >
+        VERIFICATION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="customer != null" >
+        #{customer,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null" >
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="repCustomer != null" >
+        #{repCustomer,jdbcType=VARCHAR},
+      </if>
+      <if test="repCustomerCode != null" >
+        #{repCustomerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCode != null" >
+        #{receiverCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="zone != null" >
+        #{zone,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="carriage != null" >
+        #{carriage,jdbcType=DECIMAL},
+      </if>
+      <if test="deliverTime != null" >
+        #{deliverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifierCode != null" >
+        #{modifierCode,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="site != null" >
+        #{site,jdbcType=VARCHAR},
+      </if>
+      <if test="siteCode != null" >
+        #{siteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isBill != null" >
+        #{isBill,jdbcType=INTEGER},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="billTitle != null" >
+        #{billTitle,jdbcType=INTEGER},
+      </if>
+      <if test="billContent != null" >
+        #{billContent,jdbcType=VARCHAR},
+      </if>
+      <if test="userComments != null" >
+        #{userComments,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="comAmount != null" >
+        #{comAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sign != null" >
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="verification != null" >
+        #{verification,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateBatchCancelOrder" parameterType="java.util.List" >
+    update oms_order
+	    SET STATUS = 0
+    where ORDERNO in 
+  	  <foreach item="order" index="index" collection="list " open="(" separator="," close=")">  
+	  	 #{order.orderNo,jdbcType=VARCHAR} 
+	  </foreach>
+	  and status = 1
+  </update>
+  
+    <update id="updateBatchOrderStatus" parameterType="java.util.List" >
+    update oms_order
+	    SET STATUS = CASE ORDERNO 
+		    <foreach item="order" index="index" collection="list " >  
+		  	  WHEN #{order.orderNo,jdbcType=VARCHAR} THEN #{order.status,jdbcType=INTEGER}
+		  	</foreach> 
+    	END
+    where 
+  	  <foreach item="order" index="index" collection="list "  separator="OR">  
+	  	(ORDERNO= #{order.orderNo,jdbcType=VARCHAR} AND STATUS<![CDATA[<]]>#{order.status,jdbcType=INTEGER})
+	  </foreach>
+  </update>
+  
+  <update id="updateOrderByOrderNoSelective" parameterType="com.spfood.oms.order.intf.domain.Order" >
+    update oms_order
+    <set >
+      <if test="orderId != null" >
+        ORDERID = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="customer != null" >
+        CUSTOMER = #{customer,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null" >
+        CUSTOMERCODE = #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="repCustomer != null" >
+        REPCUSTOMER = #{repCustomer,jdbcType=VARCHAR},
+      </if>
+      <if test="repCustomerCode != null" >
+        REPCUSTOMERCODE = #{repCustomerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        RECEIVER = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCode != null" >
+        RECEIVERCODE = #{receiverCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="zone != null" >
+        ZONE = #{zone,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        CITYCODE = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        CITYNAME = #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        ADDR = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="carriage != null" >
+        CARRIAGE = #{carriage,jdbcType=DECIMAL},
+      </if>
+      <if test="deliverTime != null" >
+        DELIVERTIME = #{deliverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null" >
+        MODIFIER = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifierCode != null" >
+        MODIFIERCODE = #{modifierCode,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFYTIME = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="site != null" >
+        SITE = #{site,jdbcType=VARCHAR},
+      </if>
+      <if test="siteCode != null" >
+        SITECODE = #{siteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isBill != null" >
+        ISBILL = #{isBill,jdbcType=INTEGER},
+      </if>
+      <if test="billType != null" >
+        BILLTYPE = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="billTitle != null" >
+        BILLTITLE = #{billTitle,jdbcType=INTEGER},
+      </if>
+      <if test="billContent != null" >
+        BILLCONTENT = #{billContent,jdbcType=VARCHAR},
+      </if>
+      <if test="userComments != null" >
+        USERCOMMENTS = #{userComments,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        ORDERAMOUNT = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="comAmount != null" >
+        COMAMOUNT = #{comAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        DISCOUNT = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        CREATETIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sign != null" >
+        SIGN = #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="verification != null" >
+        VERIFICATION = #{verification,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ORDERNO = #{orderNo,jdbcType=VARCHAR}
+      <if test="status != null" >
+        AND STATUS <![CDATA[<]]> #{status,jdbcType=INTEGER}
+      </if>
+  </update>
+  
+  <!-- 查询条件 -->
+   <sql id="where_query" >
+	  <where >
+	      <if test="orderNo != null" >
+	         AND ORDERNO = #{orderNo}
+	      </if>
+	      <if test="startDate != null" >
+			 AND CREATETIME >= date_format(#{startDate}, '%Y-%m-%d %H:%i:%s')
+	      </if>
+	      <if test="endDate != null" >
+			 AND CREATETIME <![CDATA[<=]]>
+			 CONCAT_WS(' ',date_format(#{endDate}, '%Y-%m-%d'),'23:59:59')
+	      </if>
+	      <if test="status != null" >
+	         AND status = #{status}
+	      </if>
+	      <if test="type != null" >
+	         AND type = #{type}
+	      </if>
+	      <if test="receiver != null" >
+	         AND receiver like CONCAT('%',#{receiver},'%')  
+	      </if>
+	      <if test="customerCode != null" >
+	         AND (customercode = #{customerCode,jdbcType=VARCHAR} OR repcustomercode = #{customerCode,jdbcType=VARCHAR} OR receivercode = #{customerCode,jdbcType=VARCHAR})
+	      </if>
+	      <if test="deliverSearch != null" >
+	         AND status in <foreach item="item" index="index" collection="deliverSearch" open="("     separator="," close=")">#{item}</foreach>
+	      </if>
+	    </where>
+  </sql>
+  
+     <!-- 通过订单条件查询订单列表 -->
+  <select id="selectOrderListByCriteriaPage" resultMap="orderResultMap" parameterType="com.spfood.oms.order.intf.domain.Order" >
+    SELECT 
+    o.orderNo, o.orderId, o.customer, o.customerCode,o.repCustomer,o.repCustomerCode, o.receiver, o.receiverCode, o.addr, o.deliverTime, o.comAmount, o.orderAmount,o.status, o.createTime, o.sign, p.payType
+    FROM oms_order o 
+	LEFT JOIN oms_order_pay p on o.orderNo = p.orderNo  
+    <include refid="where_query"/>
+    	ORDER BY ${sort}
+  </select>
+  
+   <!-- 通过订单编号查询订单详情 -->
+  <select id="selectOrderDetailByOrderNo" resultMap="orderResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_Detail_List" />
+    FROM oms_order o 
+	LEFT JOIN oms_order_pay p on o.ORDERNO  =  p.ORDERNO
+  	LEFT JOIN oms_order_commodity c on o.orderNo = c.orderNo
+  	LEFT JOIN oms_order_log l on o.ORDERNO = l.ORDERNO
+    WHERE o.orderNo = #{orderNo,jdbcType=VARCHAR}
+    ORDER BY c.code,l.oprTime DESC
+  </select>
+  <!-- 查询订和订单关联商品  -->
+  <select id="selectOrderAndCommodityByOrderNo" resultMap="orderResultMap" parameterType="java.lang.String" >
+    SELECT 
+    o.orderNo, o.orderId, o.type, o.customer, o.customerCode,o.repCustomer,o.repCustomerCode, o.receiver, o.receiverCode, o.phone, o.zone, o.cityCode, o.cityName, o.addr, o.carriage, o.deliverTime, 
+    o.modifier, o.modifierCode, o.modifyTime, o.site, o.siteCode, o.isBill, o.billType, o.billTitle, o.billContent, o.userComments, o.comAmount, o.orderAmount, 
+    o.discount, o.status, o.createTime,o.sign,o.verification,
+    c.comId, c.orderNo orderNo2, c.code, c.type type2, c.typeName, c.name, c.price, c.actPrice, c.count, c.subTotal, c.isPackage,c.pictureUrl,c.areaCode,c.areaName
+    FROM oms_order o 
+  	LEFT JOIN oms_order_commodity c on o.orderNo = c.orderNo
+    WHERE o.orderNo = #{orderNo,jdbcType=VARCHAR}
+    ORDER BY c.code
+  </select>
+  <!-- 查询订和订单关联商品  -->
+  <select id="selectOrderAndCommodityByOrderNoList" resultMap="orderResultMap" parameterType="java.lang.String" >
+    SELECT 
+    o.orderNo, o.orderId, o.type, o.customer, o.customerCode,o.repCustomer,o.repCustomerCode, o.receiver, o.receiverCode, o.phone, o.zone, o.cityCode, o.cityName, o.addr, o.carriage, o.deliverTime, 
+    o.modifier, o.modifierCode, o.modifyTime, o.site, o.siteCode, o.isBill, o.billType, o.billTitle, o.billContent, o.userComments, o.comAmount, o.orderAmount, 
+    o.discount, o.status, o.createTime,o.sign,o.verification,
+    c.comId, c.orderNo orderNo2, c.code, c.type type2, c.typeName, c.name, c.price, c.actPrice, c.count, c.subTotal, c.isPackage,c.pictureUrl,c.areaCode,c.areaName
+    FROM oms_order o 
+  	LEFT JOIN oms_order_commodity c on o.orderNo = c.orderNo
+    WHERE o.orderNo in
+      <foreach item="orderNo" index="index" collection="list " open="(" separator="," close=")">
+	  	 #{orderNo,jdbcType=VARCHAR}
+	  </foreach>
+    ORDER BY c.code
+  </select>
+   <!-- 通过订单编号查询订单详情 -->
+  <select id="selectOrderDetailListByOrderNo" resultMap="orderResultMap" parameterType="java.util.List" >
+    SELECT 
+    <include refid="Base_Column_Detail_List" />
+    FROM oms_order o 
+	LEFT JOIN oms_order_pay p on o.ORDERNO  =  p.ORDERNO
+  	LEFT JOIN oms_order_commodity c on o.orderNo = c.orderNo
+  	LEFT JOIN oms_order_log l on o.ORDERNO = l.ORDERNO
+    where o.orderNo in
+      <foreach item="orderNo" index="index" collection="list " open="(" separator="," close=")">
+	  	 #{orderNo,jdbcType=VARCHAR}
+	  </foreach>
+    ORDER BY c.code,l.oprTime
+  </select>
+  
+  <update id="updateOrderCancel" parameterType="java.lang.String" >
+    update oms_order
+	    SET STATUS = 0 where STATUS = 1 AND ORDERNO = #{orderNo,jdbcType=VARCHAR}
+  </update>
+  
+   <!-- 通过查询条件查询订单 -->
+  <select id="getOrderPageByParam" resultMap="orderResultMap" parameterType="com.spfood.oms.order.intf.domain.Order" >
+    SELECT   
+    orderno, customer,repcustomer,receiver, comamount, orderamount,
+    carriage,discount,status, createtime,isbill,type
+    from oms_order o
+    	<where > 
+		      <if test="startDate != null" >
+		         AND o.createtime > #{startDate}
+		      </if>
+		      <if test="endDate != null" >
+		         AND o.createtime <![CDATA[<]]> #{endDate}
+		      </if>
+		      <if test="status != null" >
+		         AND o.status = #{status}
+		      </if>
+		      <if test="type != null" >
+		         AND o.type = #{type}
+		      </if>
+		      <if test="customerCode != null" >
+		         AND (o.customerCode = #{customerCode} or o.repcustomercode = #{customerCode} or o.receivercode = #{customerCode} )
+		      </if>
+		</where>
+    	ORDER BY createtime desc  
+  </select>
+  
+  
+  
+  <select id="selectCount" parameterType="com.spfood.oms.order.intf.domain.Order" resultType="java.lang.Long">
+  	select count(*) from oms_order o  
+  		  <where > 
+		      <if test="startDate != null" >
+		         AND o.createtime > #{startDate}
+		      </if>
+		      <if test="endDate != null" >
+		         AND o.createtime <![CDATA[<]]> #{endDate}
+		      </if>
+		      <if test="status != null" >
+		         AND o.status = #{status}
+		      </if>
+		      <if test="type != null" >
+		         AND o.type = #{type}
+		      </if>
+		      <if test="customerCode != null" >
+		         AND (o.customerCode = #{customerCode} or o.repcustomercode = #{customerCode} or o.receivercode = #{customerCode} )
+		      </if>
+		</where>  
+  </select>
+  
+</mapper>

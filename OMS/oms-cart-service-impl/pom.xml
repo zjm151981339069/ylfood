@@ -1,0 +1,168 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>oms-cart-service-impl</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>oms-cart-service-impl</name>
+  <url>http://maven.apache.org</url>
+
+   <parent>
+  	<groupId>com.spfood</groupId>
+  	<artifactId>spfood-site</artifactId>
+  	<version>0.0.2-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <profiles>
+  	<profile>
+  		<id>DEV</id>
+  		<properties>
+  			<env>dev</env>
+        </properties>
+  	</profile>
+  	<profile>
+  		<id>TEST</id>
+  		<properties>
+  			 <env>test</env>
+        </properties>
+  	</profile>
+  </profiles>
+
+  <dependencies>
+  	<dependency>
+  		<groupId>com.spfood</groupId>
+  		<artifactId>oms-cart-service-intf</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+		<groupId>com.spfood</groupId>
+		<artifactId>wms-goods-service-intf</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+ 
+  	<dependency>
+  		<groupId>com.spfood</groupId>
+  		<artifactId>common</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+		<version>${spring.version}</version>
+		<scope>test</scope>
+		<exclusions>
+	    	<exclusion>  
+	            <groupId>org.springframework</groupId>  
+	            <artifactId>spring-core</artifactId>  
+	        </exclusion>  
+	    </exclusions>
+	</dependency>
+  	
+  	<dependency>
+	    <groupId>com.alibaba</groupId>
+	    <artifactId>dubbo</artifactId>
+	    <version>${dubbo-version}</version>
+	    <exclusions>
+	    	<exclusion>  
+	            <groupId>org.springframework</groupId>  
+	            <artifactId>spring</artifactId>  
+	        </exclusion>  
+	    </exclusions>
+	</dependency>
+
+	<dependency>
+	    <groupId>com.netflix.curator</groupId>
+	    <artifactId>curator-framework</artifactId>
+	    <version>${curator-version}</version>
+	</dependency>
+
+	<dependency>
+	    <groupId>com.github.sgroschupf</groupId>
+	    <artifactId>zkclient</artifactId>
+	    <version>${zkclient-version}</version>
+	</dependency>
+  </dependencies>
+
+  
+  <build>
+  	<finalName>oms-cart-service-impl</finalName>
+    <resources>
+        <resource>
+            <directory>${project.basedir}/src/main/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+      </resources>
+    <plugins>
+    	<plugin>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.4</version>
+            <configuration>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                    <exclude>**/*.xml</exclude>
+                </excludes>
+            </configuration>
+          </plugin>
+          <plugin>  
+            <groupId>org.apache.maven.plugins</groupId>  
+            <artifactId>maven-assembly-plugin</artifactId>  
+            <version>2.4</version>  
+            <configuration>  
+                <descriptors>  
+                    <descriptor>/src/main/assembly/assembly.xml</descriptor>  
+                </descriptors>  
+            </configuration>  
+            <executions>  
+                <!-- 当执行mvn package时才会打包 -->  
+                <execution>  
+                    <id>make-assembly</id>  
+                    <phase>package</phase>  
+                    <goals>  
+                        <goal>single</goal>  
+                    </goals>  
+                </execution>  
+            </executions>  
+        </plugin> 
+          
+    	
+    </plugins>  
+  </build>
+  <pluginRepositories>
+		<pluginRepository>
+			<id>SPfoodPluginRepository</id>
+			<name>SPfoodPluginRepository</name>
+			<url>http://10.8.48.232:9090/nexus/content/groups/public/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>SPfoodRepository</id>
+			<name>SPfoodRepository</name>
+			<snapshots>
+		        <enabled>true</enabled>
+		        <updatePolicy>always</updatePolicy>
+		    </snapshots>
+			<url>http://10.8.48.232:9090/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>SPFood-Release</id>
+			<name>Local Nexus Repository</name>
+			<url>http://10.8.48.232:9090/nexus/content/repositories/SPFoodRelease/</url>
+		</repository>
+		<snapshotRepository>
+			<id>SPFood-Snapshot</id>
+			<name>Local Nexus Repository</name>
+			<url>http://10.8.48.232:9090/nexus/content/repositories/SPFoodSnapshot/</url>
+		</snapshotRepository>
+	</distributionManagement>
+  
+  
+</project>

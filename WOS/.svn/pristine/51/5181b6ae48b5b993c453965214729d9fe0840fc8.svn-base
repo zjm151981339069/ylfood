@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+    <beans xmlns="http://www.springframework.org/schema/beans"    
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"    
+        xmlns:context="http://www.springframework.org/schema/context"    
+        xmlns:mvc="http://www.springframework.org/schema/mvc"  
+        xmlns:amq="http://activemq.apache.org/schema/core"  
+        xmlns:jms="http://www.springframework.org/schema/jms"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                            http://www.springframework.org/schema/beans/spring-beans.xsd  
+                            http://www.springframework.org/schema/context  
+                            http://www.springframework.org/schema/context/spring-context.xsd  
+                            http://www.springframework.org/schema/mvc  
+                            http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+                            http://www.springframework.org/schema/jms
+                            http://www.springframework.org/schema/jms/spring-jms-4.0.xsd
+                            http://activemq.apache.org/schema/core  
+                            http://activemq.apache.org/schema/core/activemq-core.xsd">    
+      
+      
+      
+    <!-- 定义消息队列连接工厂 -->    
+    <bean id="activeMQConnectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${order.mq.url}"/>
+        <property name="sendTimeout" value="30000" />
+        <property name="redeliveryPolicy" ref="activeMQRedeliveryPolicy"></property>
+        <property name="userName" value="${order.mq.user}"></property>
+        <property name="password" value="${order.mq.password}"></property>
+    </bean> 
+    <bean id="activeMQRedeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+        <property name="maximumRedeliveries" value="6"/>
+        <property name="initialRedeliveryDelay" value="10000"/>
+        <property name="useExponentialBackOff" value="true"/>
+        <property name="backOffMultiplier" value="4"/>
+        <property name="maximumRedeliveryDelay" value="30000"/>
+    </bean> 
+      
+    <!-- 定义消息队列（Queue） -->  
+    <bean id="wos" class="org.apache.activemq.command.ActiveMQQueue">  
+        <!-- 设置消息队列的名字 -->  
+        <constructor-arg>  
+            <value>${order.mq.destination.wos.receive}</value>  
+        </constructor-arg>  
+    </bean>  
+    <bean id="wms" class="org.apache.activemq.command.ActiveMQQueue">  
+        <!-- 设置消息队列的名字 -->  
+        <constructor-arg>  
+            <value>${order.mq.destination.wms.delive}</value>  
+        </constructor-arg>  
+    </bean> 
+    <bean id="scs_sort" class="org.apache.activemq.command.ActiveMQQueue">  
+        <!-- 设置消息队列的名字 -->  
+        <constructor-arg>  
+            <value>${order.mq.destination.scs.sort}</value>  
+        </constructor-arg>  
+    </bean> 
+    <bean id="scs_requisition" class="org.apache.activemq.command.ActiveMQQueue">  
+        <!-- 设置消息队列的名字 -->  
+        <constructor-arg>  
+            <value>${order.mq.destination.scs.requisition}</value>  
+        </constructor-arg>  
+    </bean>
+      
+    <!-- 配置JMS模板（Queue），Spring提供的JMS工具类，它发送、接收消息。 -->  
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">  
+        <property name="connectionFactory" ref="activeMQConnectionFactory" />  
+        <property name="defaultDestination" ref="wos" />  
+        <property name="receiveTimeout" value="10000" />  
+        <!-- true是topic，false是queue，默认是false，此处显示写出false -->  
+        <property name="pubSubDomain" value="false" />  
+        <!-- 事务控制 -->
+        <property name="sessionTransacted" value="true" />
+    </bean>  
+    <bean id="queueMessageListener" class="com.spfood.wos.workOrder.utils.OmsOrderMqListener" />        
+    <jms:listener-container destination-type="queue" container-type="default" connection-factory="activeMQConnectionFactory" acknowledge="transacted" >
+        <jms:listener destination="${order.mq.destination.wos.receive}" ref="queueMessageListener" />
+    </jms:listener-container>
+ </beans>  
